@@ -1,0 +1,13 @@
+*.env
+UserMicro/node_modules/
+UserMicro/package-lock.json
+ChatMicro/node_modules/
+ChatMicro/package-lock.json
+FilterMicro/node_modules/
+FilterMicro/package-lock.json
+NotificationMicro/node_modules/
+NotificationMicro/package-lock.json
+PublicationsMicro/node_modules/
+PublicationsMicro/package-lock.json
+WalletMicro/node_modules/
+WalletMicro/package-lock.json
