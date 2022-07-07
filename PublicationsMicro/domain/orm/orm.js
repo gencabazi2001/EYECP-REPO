@@ -133,6 +133,38 @@ exports.LikeComment = async (likeCommentDTO) => {
   }
 };
 
+exports.TransactionData = async () => {
+  try {
+    let userIDs = await conn.db.User.find({});
+    const map = new Map();
+    for (let i = 0; i < userIDs.length; i++) {
+      let pubs = await conn.db.Pub.find({ userID: userIDs[i]._id });
+      
+      let userlikes = 0;
+      for (let i = 0; i < pubs.length; i++) {
+        pubs[i].likes.forEach((like,i)=>{
+          //Date.now() - 86400000
+          if (like.created_at.toISOString().split('T')[0] == new Date().toISOString().split('T')[0]){
+            userlikes++
+          }
+        })
+      };
+      if (userlikes != 0 ) {
+       map.set(userIDs[i]._id.toString(),userlikes);
+      }
+    }
+    if (userIDs.length == 0) {
+      throw "no data";
+    } else {
+      const obj = Object.fromEntries(map);
+      return obj;
+    }
+  } catch (err) {
+    console.log(" err Register = ", err);
+    return await { err: { code: 123, messsage: err } };
+  }
+};
+
 exports.Comment = async (commentDTO) => {
   try {
     const filter = { _id: commentDTO.PubID };

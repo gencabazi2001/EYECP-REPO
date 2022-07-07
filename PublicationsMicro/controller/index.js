@@ -11,6 +11,7 @@ router.post("/publish/comment", pubs.Comment);
 router.delete("/publish/delete", pubs.Delete);
 router.post("/publish/like/comment", pubs.LikeComment);
 router.put("/publish/delete/comment", pubs.DeleteComment);
+router.get("/data",pubs.TransactionData)
 
 sub.Kaf()
 module.exports = router;
