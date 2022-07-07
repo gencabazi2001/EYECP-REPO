@@ -6,10 +6,7 @@ module.exports = (db) => {
       userID:String,
       value:Number,
       likes: Number,
-      timeInterval:{
-        start: Date,
-        end:Date
-      }
+      theDate: Date
     },
     {
       timestamps: {

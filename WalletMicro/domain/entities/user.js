@@ -5,7 +5,7 @@ module.exports = (db) => {
     {
       _id: {type: mongoose.Schema.Types.ObjectId},
       name: String,
-      email:String
+      email:String,
     },
     {
       timestamps: {

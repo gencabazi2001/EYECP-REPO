@@ -70,6 +70,70 @@ exports.GetWallets = async (req,res) => {
   }
 }
 
+exports.DeleteWallet = async (req,res) => {
+  let status = "Success",
+    errorCode = "",
+    message = "",
+    data = {},
+    statusCode = 0,
+    resp = {};
+  let respOrm;
+  try {
+    dto.DeleteWalletDTO = req.body;
+    respOrm = await orm.DeleteWallet(dto.DeleteWalletDTO);
+    if (respOrm.err) {
+      (status = "Failure"),
+        (errorCode = respOrm.err.code),
+        (message = respOrm.err.messsage),
+        (statusCode = enum_.CODE_BAD_REQUEST);
+    } else {
+      (message = "Wallet Deleted"), (statusCode = enum_.CODE_CREATED);
+      Object.assign(data, {respOrm});
+    }
+    resp = await magic.ResponseService(status, errorCode, message, data);
+    return res.status(statusCode).send(resp);
+  } catch (err) {
+    console.log("err = ", err);
+    return res
+      .status(enum_.CODE_INTERNAL_SERVER_ERROR)
+      .send(
+        await magic.ResponseService("Failure", enum_.CRASH_LOGIC, "err", "")
+      );
+  }
+}
+
+exports.GetTransactions = async (req,res) => {
+  let status = "Success",
+    errorCode = "",
+    message = "",
+    data = {},
+    statusCode = 0,
+    resp = {};
+  let respOrm;
+  try {
+    dto.GetWalletsDTO = req.params;
+    respOrm = await orm.GetTransactions(dto.GetWalletsDTO);
+    if (respOrm.err) {
+      (status = "Failure"),
+        (errorCode = respOrm.err.code),
+        (message = respOrm.err.messsage),
+        (statusCode = enum_.CODE_BAD_REQUEST);
+    } else {
+      (message = "Got Transactions"), (statusCode = enum_.CODE_CREATED);
+      Object.assign(data, {respOrm});
+    }
+    resp = await magic.ResponseService(status, errorCode, message, data);
+    return res.status(statusCode).send(resp);
+  } catch (err) {
+    console.log("err = ", err);
+    return res
+      .status(enum_.CODE_INTERNAL_SERVER_ERROR)
+      .send(
+        await magic.ResponseService("Failure", enum_.CRASH_LOGIC, "err", "")
+      );
+  }
+}
+
 exports.ChangeOwner = async (req,res) => {
   let status = "Success",
     errorCode = "",

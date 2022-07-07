@@ -1,12 +1,24 @@
 exports.CreateWalletDTO = () => {
   return {
     UserID:"",
-    Bilance:0.0,
+    Balance:0.0,
     Active:true
   }
 }
 
+exports.DeleteWalletDTO = () => {
+  return {
+    WalletID:""
+  }
+}
+
 exports.GetWalletsDTO = () => {
+  return {
+    UserID:""
+  }
+}
+
+exports.GetTransactionsDTO = () => {
   return {
     UserID:""
   }
