@@ -14,6 +14,8 @@ type Event struct {
 	Username   string `json:"username"`
 	Email      string `json:"email"`
 	Validation string `json:"validationString"`
+	Likes      string `json:"likes"`
+	Amount     string `json:"amount"`
 }
 
 func GetEvent(msg kafka.Message) {
@@ -35,6 +37,11 @@ func SendMail(event Event) {
 		subject := "Confirm the Owner Changing!"
 		content := "Please Verify that you want to give your wallet to somebody else \n click here:" + ownerRoute + event.Validation
 		send(event, subject, content)
+	case "transactionDetails":
+		subject := "Daily Transactions"
+		content := "Congratulations!\nYou got " + event.Likes + " likes yesterday!\nThat means you earned " + event.Amount + " coins!"
+		send(event, subject, content)
+
 	default:
 		fmt.Println("not meant for me")
 	}
