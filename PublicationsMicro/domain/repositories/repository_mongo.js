@@ -4,7 +4,7 @@ const tag = require("../entities/tag");
 const user = require("../entities/user")
 
 const conn1 = mongoose.createConnection(
-  "mongodb://localhost:27017/PublicationsDB",
+  process.env.LOCAL_PUB_DB,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

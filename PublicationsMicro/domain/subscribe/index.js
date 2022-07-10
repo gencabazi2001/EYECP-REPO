@@ -3,7 +3,7 @@ const dto = require("../DTO/index");
 const orm = require("../orm/orm")
 
 const kafka = new Kafka({
-  brokers: ["0.0.0.0:9092"],
+  brokers: ['broker:29092','broker:9092','0.0.0.0:9092'],
 });
 const consumer = kafka.consumer({ groupId: "test-group"});
 

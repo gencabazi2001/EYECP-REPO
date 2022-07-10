@@ -49,8 +49,8 @@ exports.Publish = async (publishDTO) => {
         longitude: publishDTO.Longitude,
       },
     });
-    publish.save();
-    return true;
+    let created = await publish.save();
+    return created;
   } catch (err) {
     console.log(" err Register = ", err);
     return await { err: { code: 123, messsage: err } };

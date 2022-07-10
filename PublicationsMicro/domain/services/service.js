@@ -2,6 +2,7 @@ const magic = require("../../util/magic");
 const enum_ = require("../../util/enum");
 const ormUser = require("../orm/orm");
 const dto = require("../DTO/index");
+const pub = require("../publish/kafka");
 const { response } = require("express");
 
 exports.Publish = async (req, res) => {
@@ -23,6 +24,16 @@ exports.Publish = async (req, res) => {
     } else {
       (message = "Post created"), (statusCode = enum_.CODE_CREATED);
       Object.assign(data, dto.PublishDTO);
+      let publishObj = {
+        eventType: "publish",
+        id: respOrm._id,
+        image: respOrm.file,
+        userID: respOrm.userID,
+        tags: respOrm.tags,
+        lat: respOrm.location.latitude,
+        long: respOrm.location.longitude,
+      };
+      await pub.Publish(JSON.stringify(publishObj));
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
@@ -173,7 +184,6 @@ exports.GetPubs = async (req, res) => {
     resp = {};
   let respOrm;
   try {
-   
     dto.UserIDDTO = req.params;
     respOrm = await ormUser.GetPubsByID(dto.UserIDDTO);
     if (respOrm.err) {
@@ -183,7 +193,7 @@ exports.GetPubs = async (req, res) => {
         (statusCode = enum_.CODE_BAD_REQUEST);
     } else {
       (message = "Got Posts"), (statusCode = enum_.CODE_ACCEPTED);
-      Object.assign(data, {respOrm});
+      Object.assign(data, { respOrm });
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
@@ -206,7 +216,6 @@ exports.GetPub = async (req, res) => {
     resp = {};
   let respOrm;
   try {
-   
     dto.PubIDDTO = req.params;
     respOrm = await ormUser.GetPub(dto.PubIDDTO);
     if (respOrm.err) {
@@ -216,7 +225,7 @@ exports.GetPub = async (req, res) => {
         (statusCode = enum_.CODE_BAD_REQUEST);
     } else {
       (message = "Got Posts"), (statusCode = enum_.CODE_ACCEPTED);
-      Object.assign(data, {respOrm});
+      Object.assign(data, { respOrm });
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
@@ -262,7 +271,6 @@ exports.DeleteComment = async (req, res) => {
   }
 };
 
-
 exports.FillFeed = async (req, res) => {
   let status = "Success",
     errorCode = "",
@@ -272,7 +280,6 @@ exports.FillFeed = async (req, res) => {
     resp = {};
   let respOrm;
   try {
-   
     dto.UserIDDTO = req.params;
     respOrm = await ormUser.FillFeed(dto.UserIDDTO);
     if (respOrm.err) {
@@ -282,7 +289,7 @@ exports.FillFeed = async (req, res) => {
         (statusCode = enum_.CODE_BAD_REQUEST);
     } else {
       (message = "Got Posts"), (statusCode = enum_.CODE_ACCEPTED);
-      Object.assign(data, {respOrm});
+      Object.assign(data, { respOrm });
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
@@ -295,8 +302,6 @@ exports.FillFeed = async (req, res) => {
       );
   }
 };
-
-
 
 exports.TransactionData = async (req, res) => {
   let status = "Success",
@@ -307,7 +312,6 @@ exports.TransactionData = async (req, res) => {
     resp = {};
   let respOrm;
   try {
-   
     respOrm = await ormUser.TransactionData();
     if (respOrm.err) {
       (status = "Failure"),
@@ -316,7 +320,7 @@ exports.TransactionData = async (req, res) => {
         (statusCode = enum_.CODE_BAD_REQUEST);
     } else {
       (message = "Got Posts"), (statusCode = enum_.CODE_ACCEPTED);
-      Object.assign(data, {respOrm});
+      Object.assign(data, { respOrm });
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
@@ -329,8 +333,3 @@ exports.TransactionData = async (req, res) => {
       );
   }
 };
-
-
-
-
-
