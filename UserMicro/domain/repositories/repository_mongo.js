@@ -3,7 +3,7 @@ const user = require("../entities/user");
 const tag = require("../entities/tag");
 const admin = require("../entities/admin");
 const conn1 = mongoose.createConnection(
-  "mongodb://localhost:27017/UserDB",
+  process.env.LOCAL_USER_DB,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

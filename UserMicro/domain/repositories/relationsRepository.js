@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const follow = require("../entities/follow");
 const block = require("../entities/block");
 const conn2 = mongoose.createConnection(
-  "mongodb://localhost:27017/UserRelationsDB",
+  process.env.LOCAL_REL_DB,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

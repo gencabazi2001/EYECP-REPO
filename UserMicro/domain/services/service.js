@@ -5,7 +5,6 @@ const dto = require("../DTO/index");
 const { registerValidation } = require("../services/validation");
 const { securePassword, validPassword } = require("../services/securePassword");
 const { token } = require("../services/sign-token");
-const { response } = require("express");
 const pub = require("../publish/kafka");
 
 exports.Login = async (req, res) => {
@@ -57,18 +56,18 @@ exports.Authenticate = async (req, res) => {
     resp = {};
   let respOrm;
   try {
-      dto.ValidationDTO = req.params;
-      respOrm = await ormUser.Authenticate(dto.ValidationDTO);
-      if (respOrm.err) {
-        (status = "Failure"),
-          (errorCode = respOrm.err.code),
-          (message = respOrm.err.messsage),
-          (statusCode = enum_.CODE_BAD_REQUEST);
-      } else {
-        (message = "User authenticated"), (statusCode = enum_.CODE_OK);
-        Object.assign(data, true);
-      }
-    
+    dto.ValidationDTO = req.params;
+    respOrm = await ormUser.Authenticate(dto.ValidationDTO);
+    if (respOrm.err) {
+      (status = "Failure"),
+        (errorCode = respOrm.err.code),
+        (message = respOrm.err.messsage),
+        (statusCode = enum_.CODE_BAD_REQUEST);
+    } else {
+      (message = "User authenticated"), (statusCode = enum_.CODE_OK);
+      Object.assign(data, true);
+    }
+
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
   } catch (err) {
@@ -80,7 +79,6 @@ exports.Authenticate = async (req, res) => {
       );
   }
 };
-
 
 exports.Register = async (req, res) => {
   let status = "Success",
@@ -109,17 +107,17 @@ exports.Register = async (req, res) => {
           _id: respOrm._id,
           username: respOrm.username,
           email: respOrm.email,
-          name:respOrm.name,
+          name: respOrm.name,
           isPrivate: false,
         };
-        await pub.Publish(JSON.stringify(userObj),"");
+        await pub.Publish(JSON.stringify(userObj), "");
         let mailObj = {
           eventType: "register",
           username: respOrm.username,
           email: respOrm.email,
-          validationString: respOrm.validationString
+          validationString: respOrm.validationString,
         };
-        await pub.Publish(JSON.stringify(mailObj),process.env.MAIL_TOPIC);
+        await pub.Publish(JSON.stringify(mailObj), process.env.MAIL_TOPIC);
       }
     } else {
       (status = "Failure"),
@@ -229,7 +227,7 @@ exports.AddDetails = async (req, res) => {
         userID: respOrm._id,
         profileImage: respOrm.details.profileImage,
       };
-      await pub.Publish(JSON.stringify(userObj),"");
+      await pub.Publish(JSON.stringify(userObj), "");
     }
     // status = 'Failure', errorCode = enum_.ERROR_REQUIRED_FIELD, message = "error", statusCode = enum_.CODE_BAD_REQUEST;
 
@@ -270,7 +268,7 @@ exports.AddSettings = async (req, res) => {
         userID: respOrm._id,
         isPrivate: respOrm.settings.isPrivate,
       };
-      await pub.Publish(JSON.stringify(userObj),"");
+      await pub.Publish(JSON.stringify(userObj), "");
     }
     // status = 'Failure', errorCode = enum_.ERROR_REQUIRED_FIELD, message = "error", statusCode = enum_.CODE_BAD_REQUEST;
 

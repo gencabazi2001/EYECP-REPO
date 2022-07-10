@@ -1,6 +1,5 @@
 const connUser = require("../repositories/repository_mongo");
 const dto = require("../DTO/index");
-const { get } = require("express/lib/response");
 const crypto = require("crypto");
 
 exports.Authenticate = async (validationDTO) => {
@@ -70,6 +69,7 @@ exports.Register = async (registerDTO) => {
 };
 exports.GetUsers = async () => {
   try {
+    console.log("reached orm")
     const result = await connUser.db.User.find();
     let returnDTO = {};
     let returnDTOs = [];

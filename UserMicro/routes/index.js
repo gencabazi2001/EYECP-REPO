@@ -1,7 +1,7 @@
 const apiServices = require("../controller/index");
 
 const routers = (app) => {
-  app.use("/api/v1", apiServices);
+  app.use("/user", apiServices);
 };
 
 module.exports = routers;

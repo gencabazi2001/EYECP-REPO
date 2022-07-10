@@ -4,13 +4,13 @@ const express = require("express"),
   users = require("../domain/services/service"),
   relations = require("../domain/services/relationService");
 
-router.post("/user/register", users.Register);
-router.get("/user/get/:UserID", users.GetUser);
-router.get("/users/get", users.GetUsers);
-router.put("/user/putDetails", users.AddDetails);
-router.put("/user/putSettings", users.AddSettings);
-router.post("/user/addTag", users.AddTag);
-router.post("/user/login", users.Login);
+router.post("/register", users.Register);
+router.get("/get/:UserID", users.GetUser);
+router.get("/getAll", users.GetUsers);
+router.put("/putDetails", users.AddDetails);
+router.put("/putSettings", users.AddSettings);
+router.post("/addTag", users.AddTag);
+router.post("/login", users.Login);
 router.get("/authenticate/:validationString", users.Authenticate);
 //user Relation endpoints
 router.post("/follow/add", relations.AddFollow);
