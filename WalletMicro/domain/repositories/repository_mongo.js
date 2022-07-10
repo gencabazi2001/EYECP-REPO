@@ -3,7 +3,7 @@ const wallet = require("../entities/wallet");
 const transaction = require("../entities/transaction");
 const user = require("../entities/user")
 const conn1 = mongoose.createConnection(
-  "mongodb://localhost:27017/WalletDB",
+  process.env.LOCAL_WALLET_DB,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

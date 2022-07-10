@@ -1,27 +1,23 @@
-const { Kafka } = require('kafkajs')
-
+const { Kafka } = require("kafkajs");
 
 const kafka = new Kafka({
-  brokers: ['0.0.0.0:9092'],
-})
+  brokers: ["0.0.0.0:9092"],
+});
 
-exports.Publish = async (msg,t) => {
-
-  const producer = kafka.producer()
-  let top = t
+exports.Publish = async (msg, t) => {
+  const producer = kafka.producer();
+  let top = t;
   if (t === "") {
-    top = process.env.TOPIC
+    top = process.env.TOPIC;
   } else {
-    top = process.env.MAIL_TOPIC
+    top = process.env.MAIL_TOPIC;
   }
 
-  await producer.connect()
+  await producer.connect();
   await producer.send({
     topic: top,
-    messages: [
-      { value: msg },
-    ],
-  })
-  
-  await producer.disconnect()
-}
+    messages: [{ value: msg }],
+  });
+
+  await producer.disconnect();
+};
