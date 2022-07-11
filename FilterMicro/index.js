@@ -7,4 +7,3 @@ console.log("Wallet service started at port " + process.env.PORT);
 server.on("error", (err) => {
   console.error(err);
 });
-
