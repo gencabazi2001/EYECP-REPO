@@ -139,18 +139,21 @@ exports.TransactionData = async () => {
     const map = new Map();
     for (let i = 0; i < userIDs.length; i++) {
       let pubs = await conn.db.Pub.find({ userID: userIDs[i]._id });
-      
+
       let userlikes = 0;
       for (let i = 0; i < pubs.length; i++) {
-        pubs[i].likes.forEach((like,i)=>{
+        pubs[i].likes.forEach((like, i) => {
           //Date.now() - 86400000
-          if (like.created_at.toISOString().split('T')[0] == new Date().toISOString().split('T')[0]){
-            userlikes++
+          if (
+            like.created_at.toISOString().split("T")[0] ==
+            new Date().toISOString().split("T")[0]
+          ) {
+            userlikes++;
           }
-        })
-      };
-      if (userlikes != 0 ) {
-       map.set(userIDs[i]._id.toString(),userlikes);
+        });
+      }
+      if (userlikes != 0) {
+        map.set(userIDs[i]._id.toString(), userlikes);
       }
     }
     if (userIDs.length == 0) {
@@ -223,7 +226,28 @@ exports.GetPubsByID = async (userIDDTO) => {
     if (pubs.length < 1) {
       throw "no publications from this userID: " + userIDDTO.UserID;
     }
-    return pubs;
+    let fullposts = [];
+    let usr = await conn.db.User.findOne({ _id: userIDDTO.UserID });
+    for (let i = 0; i < pubs.length; i++) {
+      let fullcomments = [];
+      for (let j = 0; j < pubs[i].comments.length; j++) {
+        let usr = await conn.db.User.findOne({
+          _id: pubs[i].comments[j].userID,
+        });
+        let fullcomment = {
+          comment: pubs[i].comments[j],
+          user: usr,
+        };
+        fullcomments.push(fullcomment);
+      }
+      let fullpost = {
+        post: pubs[i],
+        user: usr,
+        comments: fullcomments,
+      };
+      fullposts.push(fullpost);
+    }
+    return fullposts;
   } catch (err) {
     console.log(" err Register = ", err);
     return await { err: { code: 123, messsage: err } };
@@ -260,7 +284,28 @@ exports.FillFeed = async (userIDDTO) => {
         postArray.push(thepost);
       }
     }
-    return postArray;
+    let fullposts = [];
+    let usr = await conn.db.User.findOne({ _id: userIDDTO.UserID });
+    for (let i = 0; i < postArray.length; i++) {
+      let fullcomments = [];
+      for (let j = 0; j < postArray[i].comments.length; j++) {
+        let usr = await conn.db.User.findOne({
+          _id: postArray[i].comments[j].userID,
+        });
+        let fullcomment = {
+          comment: postArray[i].comments[j],
+          user: usr,
+        };
+        fullcomments.push(fullcomment);
+      }
+      let fullpost = {
+        post: postArray[i],
+        user: usr,
+        comments: fullcomments,
+      };
+      fullposts.push(fullpost);
+    }
+    return fullposts;
   } catch (err) {
     console.log(" err Register = ", err);
     return await { err: { code: 123, messsage: err } };
