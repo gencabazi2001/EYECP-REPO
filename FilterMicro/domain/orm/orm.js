@@ -16,6 +16,25 @@ exports.RegisterUser = async (msg) => {
   }
 };
 
+exports.Explore = async (filterUserIDDTO) => {
+  try {
+    let publications = []
+ 
+      let pubs = await conn.db.Pub.find().sort({ created_at: -1 }).limit(50)
+      for (let j = 0; j < pubs.length; j++) {
+        publications.push(pubs[j])
+    }
+    if (publications.length<1) {
+      throw "not found"
+    }
+    return publications
+  } catch (err) {
+    console.log(" err Register = ", err);
+    return await { err: { code: 123, messsage: err } };
+  }
+};
+
+
 exports.GetPostsByFollowing = async (filterUserIDDTO) => {
   try {
     let followPairs = await conn1.db.Follow.find({following:filterUserIDDTO.UserID})

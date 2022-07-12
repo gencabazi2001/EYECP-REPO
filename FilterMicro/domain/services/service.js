@@ -132,3 +132,33 @@ exports.GetPostsByFollowing = async (req,res) => {
       );
   }
 }
+exports.Explore = async (req,res) => {
+  let status = "Success",
+    errorCode = "",
+    message = "",
+    data = {},
+    statusCode = 0,
+    resp = {};
+  let respOrm;
+  try {
+    respOrm = await orm.Explore();
+    if (respOrm.err) {
+      (status = "Failure"),
+        (errorCode = respOrm.err.code),
+        (message = respOrm.err.messsage),
+        (statusCode = enum_.CODE_BAD_REQUEST);
+    } else {
+      (message = "Got Posts"), (statusCode = enum_.CODE_CREATED);
+      Object.assign(data, {respOrm});
+    }
+    resp = await magic.ResponseService(status, errorCode, message, data);
+    return res.status(statusCode).send(resp);
+  } catch (err) {
+    console.log("err = ", err);
+    return res
+      .status(enum_.CODE_INTERNAL_SERVER_ERROR)
+      .send(
+        await magic.ResponseService("Failure", enum_.CRASH_LOGIC, "err", "")
+      );
+  }
+}

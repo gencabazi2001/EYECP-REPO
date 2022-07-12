@@ -9,6 +9,7 @@ const express = require("express"),
   router.get('/by/user', users.GetPostsByUser)
   router.get('/time', users.GetPostsByTime)
   router.get('/following',users.GetPostsByFollowing)
-  
+  router.get('/explore',users.Explore)
+
   sub.Kaf()
 module.exports = router;

@@ -272,10 +272,72 @@ exports.GetPub = async (pubIDDTO) => {
     return await { err: { code: 123, messsage: err } };
   }
 };
+
+const checkFollow = async (myid, checkid) => {
+  let myFollows = await conn1.db.Follow.find({following:myid})
+
+  found = false
+  for (let i = 0; i < myFollows.length; i++) {
+    if (myFollows[i].follower == checkid) {
+      found = true
+    }
+  }
+  return found
+
+}
+
+exports.Explore = async (userIDDTO) => {
+  try {
+    let pubs = await conn.db.Pub.find().sort({ created_at: -1 }).limit(50);
+    if (pubs.length < 1) {
+      throw "no publications from this userID: " + userIDDTO.UserID;
+    }
+    let fullposts = [];
+   
+
+
+    for (let i = 0; i < pubs.length; i++) {
+      console.log(userIDDTO.UserID)
+      if (pubs[i].userID == userIDDTO.UserID){
+        console.log("continued")
+        continue;
+      }
+      let found = await checkFollow(userIDDTO.UserID,pubs[i].userID)
+      if (found){
+        console.log("continued from here")
+        continue;
+      }
+      let fullcomments = [];
+      let postUser = await conn.db.User.findOne({ _id: pubs[i].userID });
+      for (let j = 0; j < pubs[i].comments.length; j++) {
+        let usr = await conn.db.User.findOne({
+          _id: pubs[i].comments[j].userID,
+        });
+        let fullcomment = {
+          comment: pubs[i].comments[j],
+          user: usr,
+        };
+        fullcomments.push(fullcomment);
+      }
+      let fullpost = {
+        post: pubs[i],
+        user: postUser,
+        comments: fullcomments,
+      };
+      fullposts.push(fullpost);
+    }
+    return fullposts;
+  } catch (err) {
+    console.log(" err Register = ", err);
+    return await { err: { code: 123, messsage: err } };
+  }
+};
+
 exports.FillFeed = async (userIDDTO) => {
   try {
     const res = await conn1.db.Follow.find({ follower: userIDDTO.UserID });
     let postArray = [];
+
     for (var i = 0; i < res.length; i++) {
       let thepost = await conn.db.Pub.findOne({
         userID: res[i].following,
@@ -284,11 +346,12 @@ exports.FillFeed = async (userIDDTO) => {
         postArray.push(thepost);
       }
     }
+
     let fullposts = [];
-   
+
     for (let i = 0; i < postArray.length; i++) {
       let fullcomments = [];
-      let postUser = await conn.db.User.findOne({ _id:  postArray[i].userID });
+      let postUser = await conn.db.User.findOne({ _id: postArray[i].userID });
       for (let j = 0; j < postArray[i].comments.length; j++) {
         let usr = await conn.db.User.findOne({
           _id: postArray[i].comments[j].userID,
