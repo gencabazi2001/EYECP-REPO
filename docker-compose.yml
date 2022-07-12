@@ -24,3 +24,34 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  # usermicro:
+  #   container_name: usermicro
+  #   image: usermicro/test
+  #   restart: always
+  #   build: .
+  #   ports:
+  #   - "3000:3000"
+  #   links:
+  #   - mongo
+  # publicationmicro:
+  #   container_name: publicationmicro
+  #   image: publicationmicro/test
+  #   restart: always
+  #   build: .
+  #   ports:
+  #   - "3001:3001"
+  #   links:
+  #   - mongo
+  #   - cache
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+    - '27018:27017'
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    # command: redis-server

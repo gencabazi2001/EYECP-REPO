@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: lab-decomposition
+build:
+  artifacts:
+  - image: mecyza/lab2
+    context: UserMicro
+    buildpacks:
+      builder: gcr.io/buildpacks/builder:v1
+deploy:
+  kubectl:
+    manifests:
+    - UserMicro/user-config.yaml
+    - UserMicro/usermicro-deployment.yaml
