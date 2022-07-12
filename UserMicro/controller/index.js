@@ -9,8 +9,6 @@ const express = require("express"),
        cb(null, '../files');    
     }, 
     filename: function (req, file, cb) {
-      console.log("______file____")
-      console.log(file)
        cb(null , file.originalname);   
     }
  });

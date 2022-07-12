@@ -297,14 +297,11 @@ exports.Explore = async (userIDDTO) => {
 
 
     for (let i = 0; i < pubs.length; i++) {
-      console.log(userIDDTO.UserID)
       if (pubs[i].userID == userIDDTO.UserID){
-        console.log("continued")
         continue;
       }
       let found = await checkFollow(userIDDTO.UserID,pubs[i].userID)
       if (found){
-        console.log("continued from here")
         continue;
       }
       let fullcomments = [];

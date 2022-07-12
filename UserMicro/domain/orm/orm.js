@@ -69,7 +69,6 @@ exports.Register = async (registerDTO) => {
 };
 exports.GetUsers = async () => {
   try {
-    console.log("reached orm")
     const result = await connUser.db.User.find();
     let returnDTO = {};
     let returnDTOs = [];
@@ -125,7 +124,6 @@ exports.GetUser = async (getUserDTO) => {
 
 exports.AddDetails = async (addDetailsDTO) => {
   try {
-    console.log("____________uthirr_________")
     const filter = { _id: addDetailsDTO.UserID };
     const update = {
       profileImage: addDetailsDTO.ProfileImage,
