@@ -11,13 +11,13 @@ exports.UserIDDTO = () => {
 exports.ReturnUserDTO = () => {
   return {
     Name: "",
-    Username: "",
-    Email: "",
+    username: "",
+    email: "",
     DOB: "",
-    Verified: false,
-    Settings: {},
-    Details: {},
-    Tags: {},
+    verified: false,
+    settings: {},
+    details: {},
+    tags: {},
   };
 };
 

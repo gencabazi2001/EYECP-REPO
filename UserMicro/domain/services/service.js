@@ -6,6 +6,8 @@ const { registerValidation } = require("../services/validation");
 const { securePassword, validPassword } = require("../services/securePassword");
 const { token } = require("../services/sign-token");
 const pub = require("../publish/kafka");
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 exports.Login = async (req, res) => {
   let status = "Success",
@@ -45,6 +47,20 @@ exports.Login = async (req, res) => {
         await magic.ResponseService("Failure", enum_.CRASH_LOGIC, "err", "")
       );
   }
+};
+exports.Extract = async (req, res) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+  jwt.verify(token, process.env.JWTKEY, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(403);
+    }
+    res.json({
+      id: user.id,
+    });
+  });
 };
 
 exports.Authenticate = async (req, res) => {
@@ -118,6 +134,13 @@ exports.Register = async (req, res) => {
           validationString: respOrm.validationString,
         };
         await pub.Publish(JSON.stringify(mailObj), process.env.MAIL_TOPIC);
+        fs.mkdir("../files/" + respOrm._id, (err) => {
+          if (err) {
+            console.log("error occurred in creating new directory", err);
+            return;
+          }
+          console.log("New directory created successfully");
+        });
       }
     } else {
       (status = "Failure"),
@@ -187,7 +210,7 @@ exports.GetUser = async (req, res) => {
         (message = respOrm.err.messsage),
         (statusCode = enum_.CODE_BAD_REQUEST);
     } else {
-      (message = "User Found"), (statusCode = enum_.CODE_FOUND);
+      (message = "User Found"), (statusCode = enum_.CODE_OK);
       Object.assign(data, respOrm);
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
@@ -211,6 +234,14 @@ exports.AddDetails = async (req, res) => {
     resp = {};
   let respOrm;
   try {
+    if (req.file) {
+      let extension = req.file.originalname.split(".")[1];
+      fs.renameSync(
+        req.file.path,
+        "../files/" + req.body.UserID + "/" + req.body.UserID + "." + extension
+      );
+      req.body.ProfileImage = req.body.UserID + "." + extension;
+    }
     dto.AddDetailsDTO = req.body;
     respOrm = await ormUser.AddDetails(dto.AddDetailsDTO);
 
@@ -229,8 +260,6 @@ exports.AddDetails = async (req, res) => {
       };
       await pub.Publish(JSON.stringify(userObj), "");
     }
-    // status = 'Failure', errorCode = enum_.ERROR_REQUIRED_FIELD, message = "error", statusCode = enum_.CODE_BAD_REQUEST;
-
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
   } catch (err) {

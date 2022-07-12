@@ -106,13 +106,13 @@ exports.GetUser = async (getUserDTO) => {
     if (result.length > 0) {
       let myResult = result[0];
       dto.ReturnUserDTO.Name = myResult.name;
-      dto.ReturnUserDTO.Email = myResult.email;
+      dto.ReturnUserDTO.email = myResult.email;
       dto.ReturnUserDTO.DOB = myResult.dob;
-      dto.ReturnUserDTO.Username = myResult.username;
-      dto.ReturnUserDTO.Verified = myResult.verified;
-      dto.ReturnUserDTO.Settings = myResult.settings;
-      dto.ReturnUserDTO.Tags = myResult.tags;
-      dto.ReturnUserDTO.Details = myResult.details;
+      dto.ReturnUserDTO.username = myResult.username;
+      dto.ReturnUserDTO.verified = myResult.verified;
+      dto.ReturnUserDTO.settings = myResult.settings;
+      dto.ReturnUserDTO.tags = myResult.tags;
+      dto.ReturnUserDTO.details = myResult.details;
 
       return dto.ReturnUserDTO;
     }
@@ -125,6 +125,7 @@ exports.GetUser = async (getUserDTO) => {
 
 exports.AddDetails = async (addDetailsDTO) => {
   try {
+    console.log("____________uthirr_________")
     const filter = { _id: addDetailsDTO.UserID };
     const update = {
       profileImage: addDetailsDTO.ProfileImage,
