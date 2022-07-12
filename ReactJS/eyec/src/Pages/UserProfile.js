@@ -62,7 +62,7 @@ function UserProfile() {
       setEdit(true);
     }
   }
-  var url = require("../../../../files/"+userid+"/"+userid+".jpg")
+  // var url = require("../../../../files/"+userid+"/"+userid+".jpg")
 
   function handleEditReq(e) {
     const formData = new FormData()
@@ -77,12 +77,12 @@ function UserProfile() {
     <ColContainer w="70%">
       <RowContainer w="100%">
         <BackgroundImageContainer>
-          <img height="100%" width="100%" src="images/back.jpg"></img>
+          {/* <img height="100%" width="100%" src="images/back.jpg"></img> */}
         </BackgroundImageContainer>
       </RowContainer>
       <RowContainer w="100%">
         <ProfileButton w="100px" radius="50%" onClick={handleEdit}>
-        <img src={url} height="100px" width="100px" style={{borderRadius:"50%"}} />
+        {/* <img src={url} height="100px" width="100px" style={{borderRadius:"50%"}} /> */}
         </ProfileButton>
       </RowContainer>
       {edit ? (

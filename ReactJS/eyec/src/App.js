@@ -9,6 +9,7 @@ import Register from "./Pages/Register";
 import {Routes, Route,Navigate } from "react-router-dom";
 import {useSelector } from "react-redux";
 import Access from "./Pages/Access";
+import Chat from "./Pages/Chat";
 
 const theme = {
   colors: {
@@ -44,6 +45,7 @@ function App() {
       <GlobalStyles />
       <div style={{ backgroundColor: theme.colors.lightBackground, padding: "0px" }}>
         <Routes>
+          <Route path="/chat" element={<Chat />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route

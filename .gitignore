@@ -1,4 +1,6 @@
 *.env
+realtime-chat-service/node_modules
+realtime-chat-service/package-lock.json
 UserMicro/node_modules/
 UserMicro/package-lock.json
 ChatMicro/node_modules/

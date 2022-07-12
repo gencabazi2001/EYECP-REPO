@@ -36,6 +36,7 @@ import {
   LoginButton,
 } from "../components/styled/Button.styled";
 import axios from "axios";
+import noUserPhoto from "../assets/no-user-image.jpg"
 
 function SideNav() {
   const [active, setActive] = useState("");
@@ -90,7 +91,7 @@ function SideNav() {
       "http://localhost:3001/pub/publish",formData
     ).then((res) => console.log(res));
   }
-  var url = require("../../../../files/"+userid+"/"+userid+".jpg")
+  //  var url = require("../../../../files/"+userid+"/"+userid+".jpg")
 
   return (
     <SideMainRowContainer>
@@ -105,7 +106,7 @@ function SideNav() {
                   setActive("MyProfile");
                 }}
               >
-                   <img src={url} height="50px" width="50px" style={{borderRadius:"50%"}} />
+                   {/* <img src={url || noUserPhoto} height="50px" width="50px" style={{borderRadius:"50%"}} /> */}
               </ProfileButton>
               {/* <h4>Genc Abazi</h4> */}
               <TextButton
@@ -155,7 +156,15 @@ function SideNav() {
             >
               Explore
             </InsideNavButton>
-            
+            <InsideNavButton
+              w="80%"
+              radius="10px"
+              onClick={() => {
+                window.location.href=`/chat?username=${user.username}&room=eyeCForum`
+              }}
+            >
+              Chat
+            </InsideNavButton>
             <hr />
           </SideSectionContainer>
           <SideSectionContainer>
