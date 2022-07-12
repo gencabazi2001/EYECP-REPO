@@ -52,6 +52,8 @@ function StreamCard({ post }) {
     return <RowContainer>{tags}</RowContainer>
   }
   const [showComments,setShowComments] = useState(false);
+  const [statePost, setStatePost] = useState(post);
+  const [postLikes, setPostLikes] = useState(post.post.likes.length);
   const showComm = () => {
     if (showComments) {
       setShowComments(false);
@@ -64,6 +66,10 @@ function StreamCard({ post }) {
 		setData({ ...data, [input.name]: input.value });
 	};
 
+  useEffect(()=>{
+   
+    
+  },[statePost])
 
   const handleComment = (e) =>{
     e.preventDefault()
@@ -80,6 +86,22 @@ function StreamCard({ post }) {
   }
   var url = require("../../../../files/"+post.user._id+"/"+post.post.file)
   function like (){
+    if(statePost.post.likes.findIndex(like => like.userID === userid)>-1){
+      console.log("includes");
+      const arr = statePost.post.likes.filter((like)=>like.userID != userid);
+      const tempPost = statePost;
+      tempPost.post.likes = [...arr];
+      setStatePost(tempPost);
+      console.log(statePost.post.likes.length);
+      setPostLikes(statePost.post.likes.length);
+    }
+    else{
+      const tempPost = statePost;
+      tempPost.post.likes.push({userID: userid});
+      setStatePost(tempPost);
+      console.log(statePost.post.likes.length);
+      setPostLikes(statePost.post.likes.length);
+    }
     const body = {
       UserID:userid,
       PubID:post.post._id
@@ -133,13 +155,13 @@ function StreamCard({ post }) {
       <img src={url} style={{borderRadius:"5%"}} />
       </CardVideoContainer>
       <CardRowBetweenContainer w="80%" fSize="small">
-        <h6>{post.post.likes.length} Likes</h6>
+        <h6>{postLikes} Likes</h6>
         <h6>{post.post.comments.length} Comments</h6>
         <h6>1k Shares</h6>
       </CardRowBetweenContainer>
       <hr />
       <CardRowBetweenContainer w="90%">
-        <InsideNavButton radius="10px" w="30%"onClick={like}>
+        <InsideNavButton radius="10px" w="30%"onClick={()=>like()}>
           <Favorite />
         </InsideNavButton>
         <InsideNavButton radius="10px" w="30%" onClick={showComm}>

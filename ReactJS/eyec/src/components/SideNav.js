@@ -91,7 +91,7 @@ function SideNav() {
       "http://localhost:3001/pub/publish",formData
     ).then((res) => console.log(res));
   }
-  //  var url = require("../../../../files/"+userid+"/"+userid+".jpg")
+   var url = require("../../../../files/"+userid+"/"+userid+".jpg")
 
   return (
     <SideMainRowContainer>
@@ -106,7 +106,7 @@ function SideNav() {
                   setActive("MyProfile");
                 }}
               >
-                   {/* <img src={url || noUserPhoto} height="50px" width="50px" style={{borderRadius:"50%"}} /> */}
+                   <img src={url} height="50px" width="50px" style={{borderRadius:"50%"}} />
               </ProfileButton>
               {/* <h4>Genc Abazi</h4> */}
               <TextButton
