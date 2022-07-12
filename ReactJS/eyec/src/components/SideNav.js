@@ -153,8 +153,9 @@ function SideNav() {
                 setActive("Tags");
               }}
             >
-              Tags
+              Explore
             </InsideNavButton>
+            
             <hr />
           </SideSectionContainer>
           <SideSectionContainer>
