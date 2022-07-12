@@ -4,18 +4,15 @@ import StreamCard from "./StreamCard";
 import axios from "axios";
 import { useSelector } from "react-redux";
 function MyFeed() {
-  const userUuid = useSelector((state) => state.user.uuid);
 
   const [streams, setStreams] = useState([]);
-  const [activeStream, setActiveStream] = useState({});
+  const usrid = useSelector((state)=>state.userID)
 
   const getStreams = () => {
     axios
-      .post(process.env.React_App_API + "userStream/getUserStream", {
-        uuid: "DGK154140UKJUP",
-      })
+      .get("http://localhost:3001/pub/getpubs/"+usrid)
       .then((res) => {
-        setStreams(res.data.streams);
+        setStreams(res.data.Resp.data.respOrm);
       })
       .catch((err) => console.log(err));
   };
@@ -27,32 +24,18 @@ function MyFeed() {
     getStreams();
   }, []);
 
-  let mystreams = [
-    { uuid: "DGK154140UKJUP", timestamp: "2022-4-23-11-19", id: 1 },
-    { uuid: "DGK154140UKJUP", timestamp: "2022-4-22-17-17", id: 2 },
-  ];
-
   return (
     <ColContainer w="60%">
       {sleep()}
       {streams.map(function (stream) {
         return (
           <StreamCard
-            key={stream._id}
-            uuid={stream.uuid}
-            timestamp={stream.timestamp}
+            key={stream.post._id}
+            post={stream}
           />
         );
       })}
-      {mystreams.map((stream) => {
-        return (
-          <StreamCard
-            key={stream.id}
-            uuid={stream.uuid}
-            timestamp={stream.timestamp}
-          />
-        );
-      })}
+    
     </ColContainer>
   );
 }

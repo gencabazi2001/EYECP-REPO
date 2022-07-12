@@ -19,7 +19,6 @@ export const RowContainer = styled.div`
 `;
 
 export const SideMainRowContainer= styled(RowContainer)`
-  /* background-color: red; */
   width: 100%;
   justify-content: center;
 `
@@ -141,6 +140,14 @@ export const CardRowLeftContainer = styled(RowContainer)`
   justify-content: start;
 `;
 
+export const CommentRowContainer = styled(RowContainer)`
+  align-items: center;
+  justify-content: space-between;
+  /* border: 1px solid gray; */
+  border-radius: 5px;
+  
+`;
+
 export const CardRowRightContainer = styled(CardRowLeftContainer)`
   align-items: center;
   justify-content: end;
@@ -165,8 +172,13 @@ export const CardHeaderContainer = styled(CardRowBetweenContainer)`
 `;
 export const CardVideoContainer = styled(ColContainer)`
   border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.dark};
+  /* border: 1px solid ${({ theme }) => theme.colors.dark}; */
   padding: 10px;
+  height:500px;
+  img {
+    max-width:100%;
+max-height:100%;
+  }
 `;
 
 export const LoginColContainer = styled(ColContainer)`
@@ -273,6 +285,44 @@ export const LoginContainer = styled(ColContainer)`
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+`;
+
+
+export const CommentColLeftContainer = styled(ColContainer)`
+  padding-left: 0px;
+  margin: 0;
+  justify-content: center;
+  align-items: start;
+  h6 {
+    margin: 0;
+    @media (max-width: 816px) {
+      font-size: medium;
+    }
+    @media (max-width: 640px) {
+      font-size: small;
+    }
+    @media (max-width: 520px) {
+      font-size: x-small;
+    }
+    @media (max-width: 420px) {
+      font-size: xx-small;
+    }
+  }
+  h5 {
+    margin: 0;
+    @media (max-width: 816px) {
+      font-size: medium;
+    }
+    @media (max-width: 640px) {
+      font-size: small;
+    }
+    @media (max-width: 520px) {
+      font-size: x-small;
+    }
+    @media (max-width: 420px) {
+      font-size: x-small;
+    }
   }
 `;
 

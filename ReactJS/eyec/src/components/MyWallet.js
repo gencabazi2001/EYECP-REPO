@@ -7,7 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setTrans } from "../state/actions/transactions";
 function MyWallet() {
+
   const [clicked, setClicked] = useState(false);
+  const [wallets, setWallets] = useState([]);
+
   const click = () => {
     if (clicked) {
       setClicked(false);
@@ -15,16 +18,15 @@ function MyWallet() {
       setClicked(true);
     }
   };
-  const dispatch = useDispatch();
 
-  const wallet = useSelector((state) => state.user.wallet);
-  
+  const userid = useSelector((state) => state.userID);
+
   const getTransactions = () => {
-    if (wallet != null || wallet != undefined) {
-      axios
-        .get(process.env.React_App_API + "transaction/" + wallet.walletid)
-        .then((res) => dispatch(setTrans(res.data)));
-    }
+    axios
+      .get("http://localhost:3002/wallet/get/" + userid)
+      .then((res) =>{ console.log(res.data.Resp.data.respOrm)
+        setWallets(res.data.Resp.data.respOrm)}
+      );
   };
   useEffect(() => {
     getTransactions();
@@ -41,13 +43,20 @@ function MyWallet() {
           <tr>
             <th>WalletId</th>
             <th>Bilance</th>
+            <th>Active</th>
+            <th>Created At</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{useSelector((state) => state.user.wallet.walletid)}</td>
-            <td>{useSelector((state) => state.user.wallet.bilance)}CLEX</td>
-          </tr>
+          {wallets.map((wallet)=>{
+            return (
+            <tr key = {wallet._id}> 
+            <td>{wallet._id}</td>
+            <td>{wallet.balance}CLEX</td> 
+            <td>{wallet.active?<>true</>:<>false</>}</td>
+            <td>{wallet.created_at}</td>
+            </tr>)
+          })}
         </tbody>
       </StyledTable>
       <hr></hr>

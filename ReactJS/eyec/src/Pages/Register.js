@@ -33,11 +33,11 @@ function Register() {
     e.preventDefault();
     console.log(data)
     axios.post(process.env.React_App_API + "user/register", {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        uuid: data.uuid,
-        macaddress: data.macaddress,
+        Name: data.name,
+        Username: data.username,
+        Email: data.email,
+        Password: data.password,
+        DOB:"2022-07-07T15:35:35.637Z",
       })
       .then(() => {
         navigate("/login");
@@ -98,26 +98,17 @@ function Register() {
             {/* <Message>This is the validation message</Message> */}
           </FormGroup>
           <FormGroup>
-            <Label>UUID</Label>
+            <Label>Username</Label>
             <Input
-              placeholder="Please enter your uuid(optional)..."
-              name="uuid"
+              placeholder="Please enter your usernamw..."
+              name="username"
               type="text"
-              defaultValue={data.uuid}
+              defaultValue={data.username}
               onChange={handleChange}
             />
             {/* <Message>This is the validation message</Message> */}
           </FormGroup>
           <FormGroup>
-            <Label>MAC Address</Label>
-            <Input
-              placeholder="Please enter your mac address..."
-              name="macaddress"
-              type="text"
-              defaultValue={data.macaddress}
-              onChange={handleChange}
-            />
-            {/* <Message>This is the validation message</Message> */}
             <LoginButton radius="10px" w="256px" type="submit">
               Register
             </LoginButton>

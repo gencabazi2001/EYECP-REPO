@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   InsideNavButton,
   ProfileButton,
   TextButton,
@@ -13,42 +14,83 @@ import {
   SideMainRowContainer
 } from "./styled/Container.styled";
 import { StyledSideNav } from "./styled/SideNav.styled";
-import { Face } from "@material-ui/icons";
+import { Face, PostAdd } from "@material-ui/icons";
 import Feed from "../Pages/Feed";
 import UserProfile from "../Pages/UserProfile";
 import { useState, useEffect } from "react";
 import Tags from "../Pages/Tags";
 import Map from "../Pages/Map";
 import {useSelector } from "react-redux";
+import {
+  Form,
+  FormGroup,
+  Input,
+  EditInput,
+  EditFormGroup,
+  Label,
+  Message,
+  PublishForm,
+  PublishLabel,
+} from "../components/styled/Form.styled";
+import {
+  LoginButton,
+} from "../components/styled/Button.styled";
+import axios from "axios";
 
 function SideNav() {
   const [active, setActive] = useState("");
 
   const [loading, setLoading] = useState(true);
+  const [post,setPost] = useState(false)
+
+  function publish(){
+    if (post){
+      setPost(false)
+    } else{
+      setPost(true)
+    }
+  }
+
+  const [data, setData] = useState({ caption: "", tags: "" });
+  const handleChange = ({ currentTarget: input }) => {
+    setData({ ...data, [input.name]: input.value });
+  };
 
   const component = (active) => {
     switch (active) {
       case "Home":
         return <Feed />;
-        break;
       case "MyProfile":
         return <UserProfile />;
-        break;
       case "Tags":
         return <Tags />;
-        break;
       case "Map":
         return <Map />;
-        break;
       default:
         return <Feed />;
-        break;
     }
   };
 
   const user = useSelector((state) => state.user);
+  const userid = useSelector(state=>state.userID)
   useEffect(() => {
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  function handlePublish(e) {
+    let tags = data.tags.split(",")
+    const formData = new FormData()
+    formData.append('postFile', selectedImage)
+    formData.append('UserID',userid)
+    formData.append('Tags',tags)
+    formData.append('Caption',data.caption)
+    formData.append('Latitude',42.2)
+    formData.append('Longitude',42.2)
+    axios.post(
+      "http://localhost:3001/pub/publish",formData
+    ).then((res) => console.log(res));
+  }
+  var url = require("../../../../files/"+userid+"/"+userid+".jpg")
 
   return (
     <SideMainRowContainer>
@@ -63,7 +105,7 @@ function SideNav() {
                   setActive("MyProfile");
                 }}
               >
-                <Face fontSize="medium" />
+                   <img src={url} height="50px" width="50px" style={{borderRadius:"50%"}} />
               </ProfileButton>
               {/* <h4>Genc Abazi</h4> */}
               <TextButton
@@ -75,7 +117,7 @@ function SideNav() {
               >
                 {(() => {
                   if (user != null || user != undefined) {
-                    return <>{user.name}</>;
+                    return <>{user.Name}</>;
                   } else {
                     return <>loading</>;
                   }
@@ -114,6 +156,55 @@ function SideNav() {
               Tags
             </InsideNavButton>
             <hr />
+          </SideSectionContainer>
+          <SideSectionContainer>
+            <ProfileButton w="50px" radius="50%" onClick={publish}>
+              <PostAdd >
+
+              </PostAdd>
+            </ProfileButton>
+            {post?<>
+              <PublishForm onSubmit={handlePublish}>
+            <EditFormGroup>
+              <br></br>
+              <PublishLabel>Image</PublishLabel>
+              <EditInput
+                type="file"
+                onChange={(event) => {
+                  console.log(event.target.files[0]);
+                  setSelectedImage(event.target.files[0]);
+                }}
+              />  
+            </EditFormGroup>
+            <EditFormGroup>
+            <hr></hr>
+              <PublishLabel>Caption</PublishLabel>
+              <EditInput
+              placeholder="Please enter the caption"
+              name="caption"
+              type="text"
+              defaultValue={data.name}
+              onChange={handleChange}
+              />
+            </EditFormGroup>
+            <EditFormGroup>
+            <hr></hr>
+              <PublishLabel>Tags</PublishLabel>
+              <EditInput
+              placeholder="Please enter some tags comma separated"
+              name="tags"
+              type="text"
+              defaultValue={data.name}
+              onChange={handleChange}
+              />
+            </EditFormGroup>
+            <EditFormGroup>
+              <LoginButton radius="10px" w="50%" type="submit">
+                Publish
+              </LoginButton>
+            </EditFormGroup>
+          </PublishForm>
+            </>:null}
           </SideSectionContainer>
         </SideColContainer>
       </StyledSideNav>

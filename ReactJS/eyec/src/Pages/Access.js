@@ -22,15 +22,17 @@ function Access() {
       headers: { Authorization: `Bearer ${token}` },
     };
     axios
-      .post(process.env.React_App_API + "user/auth", {}, config)
+      .post(process.env.React_App_API + "user/extract", {}, config)
       .then((res) => {
         sessionStorage.setItem("userID", res.data.id);
+        console.log(res.data.id)
         dispatch(setUserID(res.data.id));
         setLoading(false);
         axios
         .get(process.env.React_App_API + "user/get/"+res.data.id)
         .then((res) => {
-          dispatch(setUser(res.data.user));
+          console.log("resaaaaaaaaaaaaaaa",res.data.Resp.data )
+          dispatch(setUser(res.data.Resp.data));
         })
       });
     }

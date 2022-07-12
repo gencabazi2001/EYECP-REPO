@@ -31,12 +31,13 @@ function Login() {
   const handleLogin = (e) =>{
     e.preventDefault()
     axios.post(process.env.React_App_API +"user/login",{
-      email : data.email,
-      password : data.password
+      Email : data.email,
+      Password : data.password
     }
     ).then(res => {
+      console.log(res.data)
       dispatch(login())
-      dispatch(setToken(res.data.data.token))
+      dispatch(setToken(res.data.Resp.data.myToken))
       navigate("/main")
     }).catch(err => {
       console.log(err)
