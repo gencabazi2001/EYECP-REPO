@@ -50,9 +50,7 @@ cron.schedule("0 2 * * *", () => {
   let mydata = {};
   console.log("running a task every minute");
   axios
-    .get("http://localhost:3001/pub/data", {
-      todo: "Buy the milk",
-    })
+    .get("http://localhost:3001/pub/data")
     .then((res) => {
       mydata = res.data.Resp.data.respOrm;
       let allLikes = 0;
