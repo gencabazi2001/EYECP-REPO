@@ -285,9 +285,10 @@ exports.FillFeed = async (userIDDTO) => {
       }
     }
     let fullposts = [];
-    let usr = await conn.db.User.findOne({ _id: userIDDTO.UserID });
+   
     for (let i = 0; i < postArray.length; i++) {
       let fullcomments = [];
+      let postUser = await conn.db.User.findOne({ _id:  postArray[i].userID });
       for (let j = 0; j < postArray[i].comments.length; j++) {
         let usr = await conn.db.User.findOne({
           _id: postArray[i].comments[j].userID,
@@ -300,7 +301,7 @@ exports.FillFeed = async (userIDDTO) => {
       }
       let fullpost = {
         post: postArray[i],
-        user: usr,
+        user: postUser,
         comments: fullcomments,
       };
       fullposts.push(fullpost);

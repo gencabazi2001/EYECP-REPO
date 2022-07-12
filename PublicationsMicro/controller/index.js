@@ -2,7 +2,19 @@ const express = require("express"),
   router = express.Router(),
   pubs = require("../domain/services/service");
   sub = require("../domain/subscribe/index")
-router.post("/publish", pubs.Publish);
+  const multer = require("multer");
+  var storage = multer.diskStorage({   
+    destination: function(req, file, cb) { 
+       cb(null, '../files');    
+    }, 
+    filename: function (req, file, cb) {
+       cb(null , file.originalname);   
+    }
+ });
+ var upload = multer({ storage: storage }).single("postFile");
+
+
+router.post("/publish",upload, pubs.Publish);
 router.get("/getpubs/:UserID", pubs.GetPubs);
 router.get("/filfeed/:UserID", pubs.FillFeed);
 router.get("/get/:PubID", pubs.GetPub);

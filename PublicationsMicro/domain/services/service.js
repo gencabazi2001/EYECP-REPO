@@ -4,6 +4,7 @@ const ormUser = require("../orm/orm");
 const dto = require("../DTO/index");
 const pub = require("../publish/kafka");
 const { response } = require("express");
+const fs = require("fs");
 
 exports.Publish = async (req, res) => {
   let status = "Success",
@@ -14,6 +15,15 @@ exports.Publish = async (req, res) => {
     resp = {};
   let respOrm;
   try {
+    if (req.file) {
+      let filename = req.file.originalname.split(".")[0];
+      let extension = req.file.originalname.split(".")[1];
+      fs.renameSync(
+        req.file.path,
+        "../files/" + req.body.UserID + "/" + req.body.UserID + filename  +"." + extension
+      );
+      req.body.File = req.body.UserID + filename + "." + extension;
+    }
     dto.PublishDTO = req.body;
     respOrm = await ormUser.Publish(dto.PublishDTO);
     if (respOrm.err) {
@@ -34,6 +44,8 @@ exports.Publish = async (req, res) => {
         long: respOrm.location.longitude,
       };
       await pub.Publish(JSON.stringify(publishObj));
+
+
     }
     resp = await magic.ResponseService(status, errorCode, message, data);
     return res.status(statusCode).send(resp);
